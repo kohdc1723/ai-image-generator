@@ -20,11 +20,12 @@ const CreatePost = () => {
 	}
 
 	const handleChange = (e) => {
-
+		setForm({ ...form, [e.target.name]: e.target.value });
 	}
 
 	const handleSurpriseMe = () => {
-
+		const randomPrompt = getRandomPrompt(form.prompt);
+		setForm({ ...form, prompt: randomPrompt });
 	}
 
 	const generateImage = () => {
@@ -43,7 +44,7 @@ const CreatePost = () => {
 					<FormField LabelName="Your name" type="text" name="name" placeholder="John Doe" value={form.name} handleChange={handleChange} />
 					<FormField LabelName="Prompt" type="text" name="prompt" placeholder="an armchair in the shape of an avocado" value={form.prompt} handleChange={handleChange} isSurpriseMe handleSurpriseMe={handleSurpriseMe} />
 				</div>
-				<div className="relative bg-slate-200 border border-slate-300 text-slate-900 text-sm rounded-lg focus:ring-teal-700 focus:border-teal-700 w-64 h-64 p-3 flex justify-center items-center">
+				<div className="mt-5 relative bg-slate-200 border border-slate-300 text-slate-900 text-sm rounded-lg focus:ring-teal-700 focus:border-teal-700 w-64 h-64 p-3 flex justify-center items-center">
 					{form.photo ? (
 						<img src={form.photo} alt={form.prompt} className="w-full h-full object-contain" />
 					) : (
@@ -57,8 +58,14 @@ const CreatePost = () => {
 					)}
 				</div>
 				<div className="mt-5 flex gap-5">
-					<button type="button" onClick={generateImage} className="text-slate-100 bg-teal-700 rounded-lg w-full">
+					<button type="button" onClick={generateImage} className="text-slate-100 bg-teal-700 rounded-lg w-full py-2">
 						{generatingImg ? "Generating ..." : "Generate"}
+					</button>
+				</div>
+				<div className="mt-10">
+					<p className="mt-2 text-sm">Once you have created the image, you can share it with others in the community</p>
+					<button type="submit" className="mt-3 text-white bg-teal-700 rounded-lg w-full py-2 text-center">
+						{loading ? "Sharing ..." : "Share with the community"}
 					</button>
 				</div>
 			</form>
