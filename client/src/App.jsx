@@ -10,7 +10,7 @@ const App = () => {
 				<Link to="/">
 					<img src={logo} alt="logo" className="w-32" />
 				</Link>
-				<Link to="/create-post" className="font-inter font-base bg-teal-700 text-slate-50 px-4 py-[6px] rounded-lg">
+				<Link to="/create-post" className="font-inter font-base bg-indigo-700 text-slate-50 px-4 py-[6px] rounded-lg">
 					Create
 				</Link>
 			</header>
