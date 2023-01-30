@@ -13,9 +13,7 @@ app.get("/", async (req, res) => {
     res.send("Hello");
 });
 
-const connectExpress = () => {
-    const port = process.env.PORT_NUMBER;
-
+const connectExpress = (port) => {
     app.listen(port, () => {
         console.log(`Server is running on port ${port}`);
     });
@@ -23,7 +21,8 @@ const connectExpress = () => {
 
 const startServer = async () => {
     try {
-        connectDb(process.env.MONGODB_CONNECTION_URI, connectExpress);
+        connectDb(process.env.MONGODB_CONNECTION_URI);
+        connectExpress(process.env.PORT_NUMBER);
     } catch (error) {
         console.error(error);
     }
