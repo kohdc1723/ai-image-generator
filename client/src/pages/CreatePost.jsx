@@ -22,12 +22,12 @@ const CreatePost = () => {
 			setLoading(true);
 
 			try {
-				const response = await fetch("http://localhost:8888/api/v1/posts", {
+				const response = await fetch("http://localhost:8888/api/v1/post", {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json"
 					},
-					body: JSON.stringify(form)
+					body: JSON.stringify({ ...form })
 				});
 
 				await response.json();
@@ -37,6 +37,8 @@ const CreatePost = () => {
 			} finally {
 				setLoading(false);
 			}
+		} else {
+			alert("Please enter a prompt and generate image");
 		}
 	}
 
