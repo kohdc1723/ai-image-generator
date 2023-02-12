@@ -3,10 +3,13 @@ import React, { useState, useEffect } from 'react';
 import { Card, Loader, FormField } from "../components";
 
 const RenderCards = (props) => {
-	if (props.data?.length > 0) {
-		return props.data.map((post) => <Card key={post._id} {...post} />);
+	const data = props.data;
+	const title = props.title;
+
+	if (data?.length > 0) {
+		return data.map((post) => <Card key={post._id} {...post} />);
 	} else {
-		return (<h2 className="mt-5 font-bold text-teal-700 text-xl uppercase">{props.title}</h2>);
+		return (<h2 className="mt-5 font-bold text-slate-900 text-lg">{title}</h2>);
 	}
 }
 
@@ -14,6 +17,8 @@ const Home = () => {
 	const [loading, setLoading] = useState(false);
 	const [allPosts, setAllPosts] = useState(null);
 	const [searchText, setSearchText] = useState("");
+	const [searchedResult, setSearchedResult] = useState(null);
+	const [searchTimeout, setSearchTimeout] = useState(null);
 
 	useEffect(() => {
 		const fetchPosts = async () => {
@@ -37,7 +42,22 @@ const Home = () => {
 				setLoading(false);
 			}
 		}
+
+		fetchPosts();
 	}, []);
+
+	const handleSearch = (e) => {
+		clearTimeout(searchTimeout);
+		setSearchText(e.target.value);
+		
+		setSearchTimeout(
+			setTimeout(() => {
+				const searchResult = allPosts.filter((item) => item.name.toLowerCase().includes(searchText.toLowerCase()) || item.prompt.toLowerCase().includes(searchText.toLowerCase()));
+
+				setSearchedResult(searchResult);
+			}, 500)
+		);
+	}
 
 	return (
 		<section className="mx-auto">
@@ -47,7 +67,7 @@ const Home = () => {
 			</div>
 			<div className="max-w-3xl">
 				<div className="mt-16">
-					<FormField />
+					<FormField labelName="Search posts" type="text" name="text" placeholder="Search posts" value={searchText} handleChange={handleSearch} />
 				</div>
 				<div className="mt-10">
 					{loading ? (
@@ -55,20 +75,20 @@ const Home = () => {
 							<Loader />
 						</div>
 					) : (
-						<>
+						<div>
 							{searchText && (
 								<h2 className="font-medium text-slate-500 text-xl mb-3">
-									Showing results for <span className="text-slate-800">{searchText}</span>
+									Showing results for <span className="text-slate-700 font-bold">{searchText}</span>
 								</h2>
 							)}
 							<div className="grid lg:grid-cols-4 sm:grid-cols-3 xs:grid-cols-2 grid-cols-1 gap-3">
 								{searchText ? (
-									<RenderCards data={[]} title="No search result" />
+									<RenderCards data={searchedResult} title="No search result" />
 								) : (
 									<RenderCards data={allPosts} title="No posts found" />
 								)}
 							</div>
-						</>
+						</div>
 					)}
 				</div>
 			</div>
